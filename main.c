@@ -21,6 +21,6 @@ int main() {
         }
     } else {
         sleep(3);
-        execlp("kill", "kill", "-SIGKILL", pidChild);
+        kill(pidChild, SIGKILL);
     }
 }
