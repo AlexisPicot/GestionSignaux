@@ -38,7 +38,6 @@ int main() {
     } else {
         for (int i = 0; i < 5; ++i) {
             sleep(1);
-            //kill(pidChild,SIGUSR1);
             switch (i) {
                 case 2:
                 case 4:
