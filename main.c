@@ -21,12 +21,13 @@ void sigusrHandler(int i) {
 
 int main() {
 
-    signal(SIGUSR1, sigusrHandler);
-    signal(SIGUSR2, sigusrHandler);
+
 
     printf("Pid : %d\n", getpid());
     int pidChild = fork();
     if (!pidChild) {
+        signal(SIGUSR1, sigusrHandler);
+        signal(SIGUSR2, sigusrHandler);
         printf("Pid : %d\n", getpid());
         while (true) {
             pause();
@@ -36,7 +37,8 @@ int main() {
 
 
     } else {
-        for (int i = 0; i < 5; ++i) {
+
+        for (int i = 0; i < 8; ++i) {
             sleep(1);
             switch (i) {
                 case 2:
