@@ -2,20 +2,23 @@
 #include <zconf.h>
 #include <signal.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 bool fin = false;
 
-void sigintHandler(int i) {
-    puts("Signal SIGINT reçu, mise à vrai du booléen FIN");
-    fin = true;
+void sigchldHandler(int i) {
+    puts("Signal SIGCHLD reçu !");
 }
 
 int main() {
-    printf("Pid : %d\n", getpid());
-    signal(SIGINT, sigintHandler);
-    while (!fin) {
-        pause();
-    }
-    puts("Fin de la boucle, interruption du programme");
+    signal(SIGCHLD, sigchldHandler);
 
+    printf("Pid : %d\n", getpid());
+    if (!fork()) {
+        sleep(3);
+        exit(0);
+    } else {
+        pause();
+        puts("Action executée après le wait");
+    }
 }
