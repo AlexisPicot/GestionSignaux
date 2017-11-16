@@ -4,50 +4,32 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+bool fini = false;
 
-void sigusrHandler(int i) {
-    switch (i) {
-        case SIGUSR1: {
-            puts("Signal SIGUSR1 reçu ! Execution de la boucle infinie");
-            break;
-        }
-        case SIGUSR2: {
-            puts("Signal SIGUSR2 reçu ! On arrete le programme fils");
-            exit(i);
-        }
-    }
+void sigchildHandler(int i) {
+    puts("TIMEOUT !");
+    fini = true;
 }
 
 
 int main() {
-
+    signal(SIGCHLD, sigchildHandler);
 
 
     printf("Pid : %d\n", getpid());
     int pidChild = fork();
     if (!pidChild) {
-        signal(SIGUSR1, sigusrHandler);
-        signal(SIGUSR2, sigusrHandler);
-        printf("Pid : %d\n", getpid());
-        while (true) {
-            pause();
-            puts("Boucle infinie");
-            sleep(1);
-        }
 
-
+        sleep(5);
+        exit(0);
     } else {
+        char number[4];
+        while (!fini) {
+            printf("Entrez un entier mais pas 0 : ");
 
-        for (int i = 0; i < 8; ++i) {
-            sleep(1);
-            switch (i) {
-                case 2:
-                case 4:
-                    kill(pidChild, SIGUSR1);
-                    break;
-            }
-
+            scanf("%s", &number);
+            if (atoi(number) && !fini) puts("Bravo !");
         }
-        kill(pidChild, SIGUSR2);
+
     }
 }
