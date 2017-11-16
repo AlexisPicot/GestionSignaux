@@ -1,6 +1,15 @@
 #include <stdio.h>
+#include <zconf.h>
+#include <signal.h>
+#include <stdbool.h>
 
 int main() {
-    printf("Hello, World!\n");
-    return 0;
+    printf("Pid : %d\n", getpid());
+    signal(SIGINT, SIG_IGN);
+    while (true) {
+        pause();
+    }
+
+}
+
 }
