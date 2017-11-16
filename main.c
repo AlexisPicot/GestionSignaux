@@ -2,7 +2,6 @@
 #include <zconf.h>
 #include <signal.h>
 #include <stdbool.h>
-#include <stdlib.h>
 
 bool fin = false;
 
@@ -14,11 +13,14 @@ int main() {
     signal(SIGCHLD, sigchldHandler);
 
     printf("Pid : %d\n", getpid());
-    if (!fork()) {
-        sleep(3);
-        exit(0);
+    int pidChild = fork();
+    if (!pidChild) {
+        while (true) {
+            puts("Boucle infinie");
+            sleep(1);
+        }
     } else {
-        pause();
-        puts("Action executée après le wait");
+        sleep(3);
+        execlp("kill", "kill", "-SIGKILL", pidChild);
     }
 }
