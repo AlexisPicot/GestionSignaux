@@ -2,23 +2,14 @@
 #include <unistd.h>
 #include "Djikstra.h"
 
-#define CLE 1
-
-
-void advance_spinner() {
-    static char bars[] = {'/', '-', '\\', '|'};
-    static int nbars = sizeof(bars) / sizeof(char);
-    static int pos = 0;
-
-    printf("%c\r", bars[pos]);
-    fflush(stdout);
-    pos = (pos + 1) % nbars;
-}
+#define CLE1 1
+#define CLE2 2
 
 
 int main() {
     int sem;
-    sem = sem_create(CLE, 0);
+    sem = sem_create(CLE1, 0);
+    sem = sem_create(CLE2, 0);
     printf("Creation du sémaphore d'identificateur %d\n", sem);
     if (fork() == 0) {
         puts("Je suis le fils, j'effectue un traitement.");
